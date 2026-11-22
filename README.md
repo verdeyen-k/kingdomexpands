@@ -19,14 +19,14 @@ the pawns stayed where they were, and a whole new row of pieces moved in between
     a b c d e f g h
 ```
 
-T = Thief, A = Archer Witch, C = Crow, O = Pope, V = Raven.
+T = Thief, A = Archer, C = Crow, O = Pope, V = Raven.
 
 ## The new pieces
 
 - **🪨 Pope** (looks like a cairn, a pile of stones): jumps to any empty square in columns **a, b, g or h**. It can't take pieces.
   But while you have a pope, the enemy king is **in check on any a, b, g or h square**. So popes can check and checkmate!
-- **🏹 Archer Witch**: steps one square any way, like a king. She can shoot any enemy piece a rook's move away (in a straight line,
-  nothing in between). The enemy piece is taken, but she stays where she is.
+- **🏹 Archer**: steps one square any way, like a king. It can shoot any enemy piece a rook's move away (in a straight line,
+  nothing in between). The enemy piece is taken, but the archer stays where it is.
 - **🐦 Crow**: moves like a bishop. **🐦‍⬛ Raven**: moves like a rook. Your crow and raven can **swap places**, but that uses your turn.
 - **🦹 Thief**: moves like a king. Whatever the thief takes **changes to your colour and joins your side**, and you put it
   anywhere you like on your half of the board (rows 1-5 for white, rows 6-10 for black).

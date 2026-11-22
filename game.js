@@ -14,7 +14,7 @@
     N: 'Jumps in an L shape, over other pieces.',
     P: 'Moves forward one (two from its starting row). Takes diagonally. Reaching the far end, it turns into a better piece.',
     O: 'Jumps to any empty square in columns a, b, g or h. Can\'t take pieces, but while you have a pope, the enemy king is in CHECK on any a, b, g or h square!',
-    A: 'Steps one square any way. Shoots any enemy a rook\'s move away (🏹): the enemy is taken, but she stays where she is.',
+    A: 'Steps one square any way. Shoots any enemy a rook\'s move away (🏹): the enemy is taken, but the archer stays where it is.',
     C: 'Moves like a bishop. Can swap places with your raven (🔄). That uses your turn.',
     V: 'Moves like a rook. Can swap places with your crow (🔄). That uses your turn.',
     T: 'Moves one square any way. Whatever the thief takes changes to your colour and joins your side: put it anywhere on your half!',

@@ -44,12 +44,12 @@
           `<ellipse cx="49" cy="27" rx="10" ry="6" fill="${f}" ${S}/>` +
           `<ellipse cx="50" cy="15" rx="5" ry="4" fill="${f}" ${S}/>` +
           `<path d="M36 72 Q42 69 46 72 M56 55 Q60 52 64 55" fill="none" stroke="${sh}" stroke-width="3" stroke-linecap="round"/>`;
-      case 'A': // archer witch: witch hat, cloak and a bow
+      case 'A': // archer: pointy cap with a feather, cloak and a bow
         return base(k) +
           `<path d="M30 84 Q34 58 50 50 Q66 58 70 84 Z" fill="${f}" ${S}/>` +
           `<circle cx="50" cy="44" r="11" fill="${f}" ${S}/>` +
-          `<path d="M26 36 Q50 28 74 36 Q50 40 26 36 Z" fill="${sh}" ${S}/>` +
-          `<path d="M36 34 L54 6 Q56 18 64 34 Z" fill="${sh}" ${S}/>` +
+          `<path d="M28 18 Q34 6 46 14 Q40 18 38 30" fill="${f}" ${S} stroke-width="3"/>` +
+          `<path d="M36 38 Q36 24 50 24 Q62 24 74 34 Q60 34 64 38 Z" fill="${sh}" ${S}/>` +
           `<circle cx="46" cy="45" r="2.2" fill="${k.eye}"/><circle cx="54" cy="45" r="2.2" fill="${k.eye}"/>` +
           `<path d="M76 40 Q90 60 76 80" fill="none" ${S} stroke-width="5"/>` +
           `<path d="M76 40 L76 80" stroke="${l}" stroke-width="2"/>` +

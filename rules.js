@@ -3,7 +3,7 @@
 // Pieces are { t: type, c: 'w' or 'b' }. Types:
 //   K king, Q queen, R rook, B bishop, N knight, P pawn,
 //   O pope (moves to any empty square in columns a, b, g or h; can't take; puts kings on a/b/g/h in check)
-//   A archer witch (steps like a king; shoots any enemy a rook's move away without moving)
+//   A archer (steps like a king; shoots any enemy a rook's move away without moving)
 //   C crow (moves like a bishop), V raven (moves like a rook); a crow and a raven can swap places (uses your turn)
 //   T thief (moves like a king; whatever it takes joins your side, placed anywhere on your half of the board)
 (function (root) {
@@ -18,7 +18,7 @@
   const ROOK_DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
   const BISHOP_DIRS = [[1, 1], [1, -1], [-1, 1], [-1, -1]];
   const KNIGHT = [[1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1]];
-  const NAMES = { K: 'King', Q: 'Queen', R: 'Rook', B: 'Bishop', N: 'Knight', P: 'Pawn', O: 'Pope', A: 'Archer Witch', C: 'Crow', V: 'Raven', T: 'Thief' };
+  const NAMES = { K: 'King', Q: 'Queen', R: 'Rook', B: 'Bishop', N: 'Knight', P: 'Pawn', O: 'Pope', A: 'Archer', C: 'Crow', V: 'Raven', T: 'Thief' };
 
   function newGame() {
     const b = new Array(N).fill(null);
@@ -72,7 +72,7 @@
       const p = b[sq(tc + dc, tr + dr)];
       if (p && p.c === by && (p.t === 'K' || p.t === 'T')) return true;
     }
-    // straight lines: rook, queen, raven, archer witch (shoots)
+    // straight lines: rook, queen, raven, archer (shoots)
     for (const [dc, dr] of ROOK_DIRS) {
       let c = tc + dc, r = tr + dr;
       while (onBoard(c, r)) {
@@ -205,7 +205,7 @@
     const p = b[mv.from];
     let reset = p.t === 'P';
     n.ep = -1;
-    if (mv.k === 's') { // archer witch shoots: the target is gone, the witch stays
+    if (mv.k === 's') { // archer shoots: the target is gone, the archer stays
       b[mv.to] = null;
       reset = true;
     } else if (mv.k === 'w') { // crow and raven swap places
