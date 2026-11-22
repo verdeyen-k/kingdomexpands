@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chess: The Kingdom Expands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap">
+<style>
+:root {
+  --bg: #2a2140; --panel: #3a2f58; --panel2: #4a3d6e; --text: #fff8ec; --muted: #c9bfe0; --accent: #ffcc3d;
+  --light: #f0d9b5; --dark: #a8744a; --danger: #ff6b6b; --good: #5ee08a;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font-family: Fredoka, system-ui, sans-serif; }
+[hidden] { display: none !important; }
+button, select, input { font: inherit; }
+button {
+  background: var(--panel2); color: var(--text); border: 3px solid #00000030; border-radius: 14px; padding: 8px 16px;
+  font-weight: 600; cursor: pointer; transition: transform .08s;
+}
+button:hover { transform: translateY(-2px); }
+button:active { transform: translateY(1px); }
+button.big { font-size: 20px; padding: 12px 22px; }
+button.primary { background: var(--accent); color: #3a2c00; }
+button:disabled { opacity: .5; cursor: default; transform: none; }
+select, input[type=text] {
+  background: var(--panel2); color: var(--text); border: 3px solid #00000030; border-radius: 12px; padding: 8px 12px; font-weight: 600;
+}
+.wrap { max-width: 1100px; margin: 0 auto; padding: 16px; }
+h1 { font-size: clamp(30px, 6vw, 52px); margin: 8px 0 0; text-align: center; line-height: 1.05; color: var(--accent); text-shadow: 0 4px 0 #00000040; }
+h1 small { display: block; font-size: .55em; color: var(--text); }
+.card { background: var(--panel); border-radius: 22px; padding: 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 6px 0 #00000030; }
+.menu { max-width: 520px; margin: 18px auto; display: flex; flex-direction: column; gap: 14px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.grow { flex: 1; }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #3a2c00; }
+.muted { color: var(--muted); font-size: 15px; }
+.error { color: var(--danger); font-weight: 600; min-height: 1.2em; }
+.code { font-size: 44px; letter-spacing: 8px; color: var(--accent); text-align: center; font-weight: 700; }
+#join-code { width: 7em; text-transform: uppercase; letter-spacing: 4px; text-align: center; }
+
+/* ---------- game ---------- */
+.game { display: grid; grid-template-columns: minmax(0, auto) 300px; gap: 16px; align-items: start; justify-content: center; }
+.top { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+#turn { font-weight: 700; font-size: 20px; padding: 6px 16px; border-radius: 999px; background: var(--panel2); }
+#turn.w { background: #fff4dc; color: #3a2c22; }
+#turn.b { background: #120e1f; color: #fff; }
+#turn.mine { box-shadow: 0 0 0 4px var(--accent); }
+#status { font-weight: 700; color: var(--danger); font-size: 20px; }
+.spacer { flex: 1; }
+.boardwrap { display: grid; grid-template-columns: 22px auto; grid-template-rows: auto 22px; }
+#board {
+  display: grid; grid-template-columns: repeat(8, var(--sq)); grid-template-rows: repeat(10, var(--sq));
+  --sq: min(9.2vw, 7.4vh, 64px); border: 6px solid #5b3a20; border-radius: 10px; overflow: hidden; touch-action: manipulation;
+  box-shadow: 0 8px 0 #00000040;
+}
+.ranks { display: grid; grid-template-rows: repeat(10, var(--sq)); --sq: min(9.2vw, 7.4vh, 64px); padding-top: 6px; }
+.files { display: grid; grid-template-columns: repeat(8, var(--sq)); --sq: min(9.2vw, 7.4vh, 64px); padding-left: 6px; grid-column: 2; }
+.ranks span, .files span { display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--muted); font-weight: 600; }
+.sq { position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.sq.l { background: var(--light); }
+.sq.d { background: var(--dark); }
+.sq.half { box-shadow: inset 0 3px 0 #ffffff50; }
+.sq svg { width: 92%; height: 92%; pointer-events: none; filter: drop-shadow(0 2px 0 #00000040); }
+.sq.last::before { content: ''; position: absolute; inset: 0; background: #ffe25a55; }
+.sq.sel::before { content: ''; position: absolute; inset: 0; background: #5ee08a88; }
+.sq.check::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle, #ff3030cc 20%, transparent 75%); }
+.sq .dot { position: absolute; width: 30%; height: 30%; border-radius: 50%; background: #2a214099; pointer-events: none; }
+.sq .ring { position: absolute; inset: 6%; border-radius: 50%; border: 5px solid #e0303099; pointer-events: none; }
+.sq .mark { position: absolute; font-size: calc(var(--sq) * .42); pointer-events: none; filter: drop-shadow(0 1px 0 #000); }
+.sq.place { box-shadow: inset 0 0 0 4px var(--good); }
+.sq.place::after { content: ''; position: absolute; width: 30%; height: 30%; border-radius: 50%; background: #5ee08acc; }
+.side { display: flex; flex-direction: column; gap: 12px; }
+#info { min-height: 90px; }
+#info h3 { margin: 0; font-size: 20px; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+#info h3 svg { width: 40px; height: 40px; }
+#info p { margin: 4px 0 0; line-height: 1.35; }
+.taken { display: flex; flex-wrap: wrap; gap: 2px; min-height: 30px; }
+.taken svg { width: 28px; height: 28px; }
+#moves { max-height: 200px; overflow: auto; font-size: 14px; color: var(--muted); margin: 0; padding-left: 26px; }
+.overlay { position: fixed; inset: 0; background: #0008; display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 5; }
+.overlay .card { max-width: 420px; width: 100%; text-align: center; }
+.promo { display: flex; gap: 8px; justify-content: center; }
+.promo button { width: 72px; height: 72px; padding: 4px; background: var(--light); }
+.promo svg { width: 100%; height: 100%; }
+#over h2 { font-size: 34px; margin: 0; color: var(--accent); }
+.legend { display: grid; grid-template-columns: 44px 1fr; gap: 6px 10px; align-items: center; text-align: left; }
+.legend svg { width: 44px; height: 44px; background: var(--light); border-radius: 8px; }
+.legend p { margin: 0; font-size: 15px; line-height: 1.3; }
+@media (max-width: 860px) {
+  .game { grid-template-columns: 1fr; justify-items: center; }
+  .side { width: 100%; max-width: 560px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Chess<small>The Kingdom Expands</small></h1>
+
+  <!-- menu -->
+  <div id="menu" class="menu screen">
+    <div class="card">
+      <h2 style="margin:0">Play on this device</h2>
+      <div class="seg" id="opp">
+        <button data-v="2p" aria-pressed="true">👥 2 players</button>
+        <button data-v="cpu" aria-pressed="false">🤖 Vs computer</button>
+      </div>
+      <div id="cpu-opts" hidden class="row">
+        <label>Computer <select id="level">
+          <option value="veryeasy">Very Easy</option><option value="easy">Easy</option><option value="medium" selected>Medium</option>
+          <option value="hard">Hard</option><option value="insane">Insane</option></select></label>
+        <label>You play <select id="mycolor"><option value="w">White</option><option value="b">Black</option><option value="r">Random</option></select></label>
+      </div>
+      <button id="start-local" class="big primary">▶ Play</button>
+    </div>
+    <div class="card">
+      <h2 style="margin:0">🌐 Play online</h2>
+      <button id="create" class="big">Make a room</button>
+      <div class="row"><input id="join-code" type="text" maxlength="4" placeholder="CODE" autocomplete="off" spellcheck="false"><button id="join" class="grow">Join a room</button></div>
+      <div id="menu-error" class="error"></div>
+    </div>
+    <div class="card">
+      <h2 style="margin:0">The new pieces</h2>
+      <div class="legend" id="legend"></div>
+    </div>
+  </div>
+
+  <!-- online room -->
+  <div id="lobby" class="menu screen" hidden>
+    <div class="card">
+      <p class="muted" style="text-align:center;margin:0">Room code</p>
+      <div class="code" id="code"></div>
+      <p id="lobby-msg" style="text-align:center;margin:0"></p>
+      <button id="lobby-start" class="big primary" hidden>GO!</button>
+      <button id="lobby-leave">◀ Leave</button>
+    </div>
+  </div>
+
+  <!-- game -->
+  <div id="game" class="screen" hidden>
+    <div class="top">
+      <span id="turn"></span><span id="status"></span><span class="spacer"></span>
+      <button id="undo">↶ Undo</button>
+      <button id="flip">⇅ Flip</button>
+      <button id="quit">◀ Menu</button>
+    </div>
+    <div class="game">
+      <div class="boardwrap">
+        <div class="ranks" id="ranks"></div>
+        <div id="board"></div>
+        <div class="files" id="files"></div>
+      </div>
+      <div class="side">
+        <div class="card" id="info"></div>
+        <div class="card"><b>White took</b><div class="taken" id="taken-w"></div><b>Black took</b><div class="taken" id="taken-b"></div></div>
+        <div class="card"><b>Moves</b><ol id="moves"></ol></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="promo" class="overlay" hidden><div class="card"><h2 style="margin:0">Your pawn becomes...</h2><div class="promo" id="promo-btns"></div></div></div>
+<div id="over" class="overlay" hidden><div class="card">
+  <h2 id="over-title"></h2><p id="over-text"></p>
+  <button id="again" class="big primary">Play again</button><button id="over-close">Look at the board</button><button id="over-menu">Menu</button>
+</div></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="rules.js?v=1"></script>
+<script src="ai.js?v=1"></script>
+<script src="pieces.js?v=1"></script>
+<script src="game.js?v=1"></script>
+</body>
+</html>
