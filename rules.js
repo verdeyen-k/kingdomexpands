@@ -3,7 +3,7 @@
 // Pieces are { t: type, c: 'w' or 'b' }. Types:
 //   K king, Q queen, R rook, B bishop, N knight, P pawn,
 //   O pope (moves to any empty square in columns a, b, g or h; can't take; puts kings on a/b/g/h in check)
-//   A archer (steps like a king; shoots any enemy a rook's move away without moving)
+//   A archer (steps like a king; shoots any enemy a bishop's move away (diagonal) without moving)
 //   C crow (moves like a bishop), V raven (moves like a rook); a crow and a raven can swap places (uses your turn)
 //   T thief (moves like a king; whatever it takes joins your side, placed anywhere on your half of the board)
 (function (root) {
@@ -72,21 +72,21 @@
       const p = b[sq(tc + dc, tr + dr)];
       if (p && p.c === by && (p.t === 'K' || p.t === 'T')) return true;
     }
-    // straight lines: rook, queen, raven, archer (shoots)
+    // straight lines: rook, queen, raven
     for (const [dc, dr] of ROOK_DIRS) {
       let c = tc + dc, r = tr + dr;
       while (onBoard(c, r)) {
         const p = b[sq(c, r)];
-        if (p) { if (p.c === by && 'RQVA'.includes(p.t)) return true; break; }
+        if (p) { if (p.c === by && 'RQV'.includes(p.t)) return true; break; }
         c += dc; r += dr;
       }
     }
-    // diagonals: bishop, queen, crow
+    // diagonals: bishop, queen, crow, archer (shoots)
     for (const [dc, dr] of BISHOP_DIRS) {
       let c = tc + dc, r = tr + dr;
       while (onBoard(c, r)) {
         const p = b[sq(c, r)];
-        if (p) { if (p.c === by && 'BQC'.includes(p.t)) return true; break; }
+        if (p) { if (p.c === by && 'BQCA'.includes(p.t)) return true; break; }
         c += dc; r += dr;
       }
     }
@@ -144,7 +144,7 @@
         case 'A': {
           steps(i, KING_STEPS, false);
           const c0 = col(i), r0 = row(i);
-          for (const [dc, dr] of ROOK_DIRS) {
+          for (const [dc, dr] of BISHOP_DIRS) {
             let c = c0 + dc, r = r0 + dr;
             while (onBoard(c, r)) {
               const p2 = b[sq(c, r)];
