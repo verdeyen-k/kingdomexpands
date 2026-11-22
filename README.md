@@ -31,7 +31,10 @@ T = Thief, A = Archer, C = Crow, O = Pope, V = Raven.
 - **🦹 Thief**: moves like a king. Whatever the thief takes **changes to your colour and joins your side**, and you put it
   anywhere you like on your half of the board (rows 1-5 for white, rows 6-10 for black).
 
-Everything else is normal chess: pawns move 2 from their starting row, en passant, castling, and pawns that reach the far end
+**Castling:** to the left it's normal (king to c, rook to d). To the right, the king only moves 1 square to **f** and the rook
+jumps to **e**, so the king stays out of the pope's g column. Click the king, then the dot where it lands.
+
+Everything else is normal chess: pawns move 2 from their starting row, en passant, and pawns that reach the far end
 become a queen, rook, bishop or knight. You win by checkmate. Stalemate and 50 moves with no captures or pawn moves are a draw.
 
 ## How to play

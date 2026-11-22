@@ -185,7 +185,8 @@
     if (k !== sq(4, r) || inCheck(s, me)) return;
     const them = other(me);
     const rook = (c) => { const p = b[sq(c, r)]; return p && p.t === 'R' && p.c === me; };
-    if (s.castle[me + 'K'] && rook(7) && !b[sq(5, r)] && !b[sq(6, r)] && !attacked(s, sq(5, r), them)) add(k, sq(6, r), 'c');
+    // castling right: the king only goes 1 square, to f (g would be in check from the pope), and the rook jumps to e
+    if (s.castle[me + 'K'] && rook(7) && !b[sq(5, r)] && !b[sq(6, r)]) add(k, sq(5, r), 'c');
     if (s.castle[me + 'Q'] && rook(0) && !b[sq(1, r)] && !b[sq(2, r)] && !b[sq(3, r)] && !attacked(s, sq(3, r), them)) add(k, sq(2, r), 'c');
   }
 
@@ -227,7 +228,7 @@
       if (mv.k === 'e') b[sq(col(mv.to), row(mv.from))] = null;
       if (mv.k === 'c') { // move the rook too
         const r = row(mv.to);
-        if (col(mv.to) === 6) { b[sq(5, r)] = b[sq(7, r)]; b[sq(7, r)] = null; }
+        if (col(mv.to) === 5) { b[sq(4, r)] = b[sq(7, r)]; b[sq(7, r)] = null; }
         else { b[sq(3, r)] = b[sq(0, r)]; b[sq(0, r)] = null; }
       }
       if (p.t === 'P' && Math.abs(row(mv.to) - row(mv.from)) === 2) n.ep = sq(col(mv.from), (row(mv.from) + row(mv.to)) / 2);
